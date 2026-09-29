@@ -1,5 +1,13 @@
 [
   {
+    "id": "1790698585216",
+    "name": "Battery pack 5000mah",
+    "category": "cargadores",
+    "price": 15,
+    "img": "https://i.ibb.co/hFwz3kz8/AFB3037-C-C359-43-D1-A0-C4-8841003-D92-FD.jpg",
+    "timestamp": "2026-09-29T16:16:25.216Z"
+  },
+  {
     "id": "1790698549076",
     "name": "Mini ups ",
     "category": "multiples",
