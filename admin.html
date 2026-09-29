@@ -122,15 +122,18 @@
             </div>
           </div>
 
+          <!-- SECCIÓN DE CATEGORÍAS ACTUALIZADA CON "MÚLTIPLES" -->
           <div class="space-y-3 pt-2 border-t border-brand-border/60">
             <label class="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2"><span class="w-5 h-5 rounded-full bg-brand-blue text-white flex items-center justify-center text-[10px] font-black">2</span>Categoría</label>
-            <div class="grid grid-cols-3 gap-2 text-xs">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
               <label class="category-radio cursor-pointer"><input type="radio" name="itemCategoryRadio" value="camisas-oversize" checked class="peer sr-only" />
                 <div class="p-3 text-center rounded-xl bg-brand-dark border border-brand-border peer-checked:bg-brand-blue peer-checked:text-white text-slate-300 font-bold transition flex flex-col items-center gap-1.5"><i class="fa-solid fa-shirt"></i><span>Oversize</span></div></label>
               <label class="category-radio cursor-pointer"><input type="radio" name="itemCategoryRadio" value="monos" class="peer sr-only" />
                 <div class="p-3 text-center rounded-xl bg-brand-dark border border-brand-border peer-checked:bg-brand-blue peer-checked:text-white text-slate-300 font-bold transition flex flex-col items-center gap-1.5"><i class="fa-solid fa-person"></i><span>Monos</span></div></label>
               <label class="category-radio cursor-pointer"><input type="radio" name="itemCategoryRadio" value="conjuntos" class="peer sr-only" />
                 <div class="p-3 text-center rounded-xl bg-brand-dark border border-brand-border peer-checked:bg-brand-blue peer-checked:text-white text-slate-300 font-bold transition flex flex-col items-center gap-1.5"><i class="fa-solid fa-vest-patches"></i><span>Conjuntos</span></div></label>
+              <label class="category-radio cursor-pointer"><input type="radio" name="itemCategoryRadio" value="multiples" class="peer sr-only" />
+                <div class="p-3 text-center rounded-xl bg-brand-dark border border-brand-border peer-checked:bg-brand-blue peer-checked:text-white text-slate-300 font-bold transition flex flex-col items-center gap-1.5"><i class="fa-solid fa-layer-group"></i><span>Múltiples</span></div></label>
             </div>
           </div>
 
@@ -142,7 +145,6 @@
             </div>
           </div>
 
-          <!-- NUEVO SISTEMA DE TALLAS MULTIPLES -->
           <div class="space-y-3 pt-2 border-t border-brand-border/60">
             <label class="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2"><span class="w-5 h-5 rounded-full bg-brand-blue text-white flex items-center justify-center text-[10px] font-black">4</span>Tallas & Etiquetas</label>
             
@@ -183,9 +185,11 @@
           <div class="relative"><i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i><input type="text" id="adminSearchInput" oninput="handleAdminSearch(this.value)" placeholder="Buscar prenda en la nube..." class="w-full bg-brand-dark border border-brand-border rounded-xl pl-9 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-brand-blue transition" /></div>
           <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs no-scrollbar">
             <button onclick="setAdminTab('all')" id="admintab-all" class="admin-tab-btn bg-brand-blue text-white shrink-0 px-3.5 py-1.5 rounded-xl font-bold uppercase text-[11px]">Todas</button>
-            <button onclick="setAdminTab('camisas-oversize')" id="admintab-camisas-oversize" class="admin-tab-btn bg-brand-dark text-slate-300 border border-brand-border shrink-0 px-3.5 py-1.5 rounded-xl font-bold uppercase text-[11px]">Camisas Oversize</button>
+            <button onclick="setAdminTab('camisas-oversize')" id="admintab-camisas-oversize" class="admin-tab-btn bg-brand-dark text-slate-300 border border-brand-border shrink-0 px-3.5 py-1.5 rounded-xl font-bold uppercase text-[11px]">Oversize</button>
             <button onclick="setAdminTab('monos')" id="admintab-monos" class="admin-tab-btn bg-brand-dark text-slate-300 border border-brand-border shrink-0 px-3.5 py-1.5 rounded-xl font-bold uppercase text-[11px]">Monos</button>
             <button onclick="setAdminTab('conjuntos')" id="admintab-conjuntos" class="admin-tab-btn bg-brand-dark text-slate-300 border border-brand-border shrink-0 px-3.5 py-1.5 rounded-xl font-bold uppercase text-[11px]">Conjuntos</button>
+            <!-- NUEVA PESTAÑA ADMIN MÚLTIPLES -->
+            <button onclick="setAdminTab('multiples')" id="admintab-multiples" class="admin-tab-btn bg-brand-dark text-slate-300 border border-brand-border shrink-0 px-3.5 py-1.5 rounded-xl font-bold uppercase text-[11px]">Múltiples</button>
           </div>
         </div>
         <div id="adminCardsContainer" class="flex-1 overflow-y-auto max-h-[600px] space-y-3 pr-1"></div>
@@ -193,7 +197,6 @@
     </main>
   </div>
   
-  <!-- CONTENEDOR DE NOTIFICACIONES TOAST (CARTEL BONITO) -->
   <div id="studioToastBox" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 items-end pointer-events-none"></div>
 
   <script>
@@ -204,7 +207,6 @@
 
     let supabaseClient = null, isCloudReady = false, selectedRawFiles = [], currentAdminTab = 'all', currentAdminSearch = '', memoryProducts = [];
 
-    // SISTEMA DE NOTIFICACIONES TOAST ANIMADO
     function showToast(msg, type = "info") {
       const box = document.getElementById('studioToastBox');
       const toast = document.createElement('div');
@@ -300,7 +302,6 @@
       e.preventDefault();
       if (selectedRawFiles.length === 0) return showToast("Por favor, sube al menos una foto.", "warning");
 
-      // Capturar tallas
       const sizeNodes = document.querySelectorAll('#sizeSelector input:checked');
       const selectedSizes = Array.from(sizeNodes).map(n => n.value);
       if (selectedSizes.length === 0) return showToast("Debes seleccionar al menos una talla disponible.", "warning");
@@ -334,7 +335,7 @@
             name: selectedRawFiles.length > 1 ? `${baseName} #${count}` : baseName,
             category: category, 
             price: price, 
-            sizes: selectedSizes, // Array de tallas múltiples
+            sizes: selectedSizes,
             image: finalUrl,
             isPromo: isPromo, 
             isTrend: isTrend, 
