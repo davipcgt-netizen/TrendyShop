@@ -273,6 +273,12 @@
         <span id="count-conjuntos" class="bg-brand-dark text-slate-400 text-[10px] px-2 py-0.5 rounded-full font-black border border-brand-border">0</span>
       </button>
 
+      <!-- NUEVA CATEGORÍA MÚLTIPLES -->
+      <button onclick="setCategory('multiples')" id="btn-multiples" class="cat-pill shrink-0 px-4 py-2.5 rounded-xl font-display font-bold uppercase tracking-wider flex items-center gap-2 bg-brand-card border border-brand-border text-slate-300 hover:text-white">
+        <i class="fa-solid fa-layer-group text-purple-400"></i><span>Múltiples</span>
+        <span id="count-multiples" class="bg-brand-dark text-slate-400 text-[10px] px-2 py-0.5 rounded-full font-black border border-brand-border">0</span>
+      </button>
+
       <button onclick="setCategory('ofertas')" id="btn-ofertas" class="cat-pill shrink-0 px-4 py-2.5 rounded-xl font-display font-bold uppercase tracking-wider flex items-center gap-2 bg-brand-card border border-amber-500/40 text-amber-300">
         <i class="fa-solid fa-tag text-amber-400 animate-pulse"></i><span>Ofertas</span>
         <span id="count-ofertas" class="bg-amber-500/20 text-amber-200 text-[10px] px-2 py-0.5 rounded-full font-black">0</span>
@@ -553,6 +559,7 @@
       document.getElementById('count-camisas-oversize').innerText = catalogCache.filter(i => i.category === 'camisas-oversize').length;
       document.getElementById('count-monos').innerText = catalogCache.filter(i => i.category === 'monos').length;
       document.getElementById('count-conjuntos').innerText = catalogCache.filter(i => i.category === 'conjuntos').length;
+      document.getElementById('count-multiples').innerText = catalogCache.filter(i => i.category === 'multiples').length;
       document.getElementById('count-ofertas').innerText = catalogCache.filter(i => i.isPromo || i.is_promo).length;
       document.getElementById('count-tendencias').innerText = catalogCache.filter(i => i.isTrend || i.is_trend).length;
     }
@@ -576,7 +583,7 @@
 
     function applyFilters() {
       let list = catalogCache;
-      if (currentCategory === 'camisas-oversize' || currentCategory === 'monos' || currentCategory === 'conjuntos') {
+      if (currentCategory === 'camisas-oversize' || currentCategory === 'monos' || currentCategory === 'conjuntos' || currentCategory === 'multiples') {
         list = list.filter(i => i.category === currentCategory);
       } else if (currentCategory === 'ofertas') { list = list.filter(i => i.isPromo || i.is_promo);
       } else if (currentCategory === 'tendencias') { list = list.filter(i => i.isTrend || i.is_trend); }
@@ -595,7 +602,6 @@
 
       empty.classList.add('hidden');
       grid.innerHTML = list.map(item => {
-        // LEER TALLAS MULTIPLES
         const itemSizes = (item.sizes && Array.isArray(item.sizes) && item.sizes.length > 0) ? item.sizes : ['Única'];
         const sizeOptions = itemSizes.map(s => `<option value="${s}">${s}</option>`).join('');
 
@@ -687,7 +693,6 @@
 
       const selectedSize = explicitSize || document.getElementById(`sizeSelect-${id}`).value;
 
-      // Buscar si el producto CON LA MISMA TALLA ya existe
       const exist = cart.find(c => c.id === id && c.selectedSize === selectedSize);
       if (exist) {
         exist.qty += 1;
